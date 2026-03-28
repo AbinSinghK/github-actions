@@ -1,0 +1,19 @@
+name: configuration-variables
+
+on:
+  workflow_dispatch
+
+env:
+  cloud: gcloud
+
+jobs:
+  config-variables-testing:
+    runs-on: ubuntu:latest
+    env:
+      Greeting: Hello
+    steps:
+      - name: testing_config_vars
+        run: echo "$Greeting $first_name is using $cloud in project id ${{vars.project_id}} "
+        env:
+          first_name: Abin
+          
