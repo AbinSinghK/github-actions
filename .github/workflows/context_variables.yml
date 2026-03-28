@@ -1,0 +1,17 @@
+name: context-variables
+
+on:
+  workflow_dispatch
+
+env:
+  cloud: gcloud  
+
+jobs:
+  context-variables:
+    runs-on: ubuntu-latest
+    steps:
+      - name: workflow-dispatch-variables
+        run: |
+            echo "Repository name: ${{github.Repository}}"
+            echo "workflow name: ${{github.workflow}}"
+            echo "Triggered by: ${{github.triggering_actor}}"
