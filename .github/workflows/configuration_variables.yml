@@ -8,7 +8,7 @@ env:
 
 jobs:
   config-variables-testing:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     env:
       Greeting: Hello
     steps:
