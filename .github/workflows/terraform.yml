@@ -20,6 +20,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # ✅ Create credentials file
+      - name: Create GCP credentials file
+        run: echo '${{ secrets.GCP_SA_KEY }}' > gcp-key.json
+
+      # ✅ Export standard env variable
+      - name: Set GOOGLE_APPLICATION_CREDENTIALS
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp-key.json" >> $GITHUB_ENV
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
