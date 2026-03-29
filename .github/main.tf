@@ -1,7 +1,7 @@
 resource "google_storage_bucket" "google_storage_bucket" {
-  name          = "mybucket12345abin"
-  location      = "US"
+  name          = var.bucket_name
+  location      = var.location
   force_destroy = true
-  project = "proven-outpost-484307-j5"
+  project = var.project_id
   public_access_prevention = "enforced"
 }
