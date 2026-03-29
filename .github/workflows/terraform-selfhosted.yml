@@ -1,0 +1,54 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: Terraform Workflow
+    runs-on: [self-hosted, linux, x64]   # ✅ updated
+
+    env:
+      TF_VERSION: 1.6.6
+      GOOGLE_PROJECT: proven-outpost-484307-j5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # ✅ Create GCP credentials file
+      - name: Create GCP credentials file
+        run: |
+          cat <<EOF > gcp-key.json
+          ${{ secrets.GCP_SA_KEY }}
+          EOF
+
+      # ✅ Export credentials
+      - name: Set GOOGLE_APPLICATION_CREDENTIALS
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp-key.json" >> $GITHUB_ENV
+
+      # ✅ Setup Terraform (optional if already installed on runner)
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./.github
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ./.github
+
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ./.github
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve
+        working-directory: ./.github
